@@ -35,7 +35,7 @@ _SELECT_ARMY   = actions.FUNCTIONS.select_army.id
 _NOT_QUEUED = [0]
 _SELECT_ALL = [0]
 
-FLAGS = flags.
+FLAGS = flags.FLAGS
 
 
 
@@ -263,7 +263,7 @@ def learn(env,
             new_screen = player_relative + path_memory
 
             # 取得reward
-            rew = obs[0].rewaed
+            rew = obs[0].reward
             
             # StepType.LAST 代表done的意思
             done = obs[0].step_type == environment.StepType.LAST
