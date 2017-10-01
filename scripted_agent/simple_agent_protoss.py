@@ -59,7 +59,7 @@ class RuleBaseAgent(base_agent.BaseAgent):
         super(RuleBaseAgent, self).step(obs)
 
         # 觀察速度，若不設置會跑很快，想快速做實驗的話此行可以註解掉
-        time.sleep(0.05)
+        time.sleep(0.01)
 
         # 取得星核在左上或是右下的資訊
         if self.nexus_top_left is None:
