@@ -67,15 +67,13 @@ class RuleBaseAgent(base_agent.BaseAgent):
             # 由於知道地圖是Simple64，因此若在左上則y座標會小於31
             nexus_y, nexus_x = (obs.observation["minimap"][_PLAYER_RELATIVE] == _PLAYER_SELF).nonzero()
             self.nexus_top_left = nexus_y.mean() <= 31
-            print('minimap nexus_y:', nexus_y.mean())
-            # return minimap nexus_y: [21 21 21 21 21 22 22 22 22 23 23 23 23 24 24 24 24 25]
 
         # rule 1: 如果水晶塔還沒建造且探測機還沒被圈選，就圈選探測機
         # 如果水晶塔還沒建造但探測機已經被圈選了，就建造水晶塔
         if not self.pylon_built:
             if not self.probe_selected:
                 unit_type = obs.observation["screen"][_UNIT_TYPE] # 列出screen上所有單位
-                probe_y, probe_x = (unit_type == _PROTOSS_PROBE).nonzero() # 找出星核座標
+                probe_y, probe_x = (unit_type == _PROTOSS_PROBE).nonzero() 
 
                 target = [probe_x[0], probe_y[0]] # 選擇第一隻探測機
 
@@ -87,8 +85,6 @@ class RuleBaseAgent(base_agent.BaseAgent):
             elif _BUILD_PYLON in obs.observation["available_actions"]:
                 unit_type = obs.observation["screen"][_UNIT_TYPE]
                 nexus_y, nexus_x = (unit_type == _PROTOSS_NEXUS).nonzero() # 找出星核的位置
-                #print('nexus location x:', nexus_x.mean())
-                #print('nexus location y:', nexus_y.mean())
 
                 # 找出星核上方或下方的位置並建造
                 target = self.transformLocation(int(nexus_x.mean()), 0, int(nexus_y.mean()), 20)
@@ -101,16 +97,8 @@ class RuleBaseAgent(base_agent.BaseAgent):
             if _BUILD_GATEWAY in obs.observation["available_actions"]:
                 unit_type = obs.observation["screen"][_UNIT_TYPE]
                 pylon_y, pylon_x = (unit_type == _PROTOSS_PYLON).nonzero()
-                print('pylon location x:', pylon_x)
-                print('pylon location y:', pylon_y)
-                #pylon location x: [32 33 34 35 31 32 33 34 35 36 30 31 32 33 34 35 36 37 30 31 32 33 34 35 36 37 30 31 32 33 34 35 36 37 30 31 32 33 34 35 36 37 31 32 33 34 35 36 32 33 34 35]
-                #pylon location y: [ 5  5  5  5  6  6  6  6  6  6  7  7  7  7  7  7  7  7  8  8  8  8  8  8  8  8  9  9  9  9  9  9  9  9 10 10 10 10 10 10 10 10 11 11 11 11 11 11 12 12 12 12]
-
-
+               
                 target = self.transformLocation(int(pylon_x.mean()), 10, int(pylon_y.mean()), 0)
-
-                #if (unit_type == _PROTOSS_PYLON).any():
-                #    self.gateway_built = True
 
                 # 確認星門有被建造，才停止這個rule
                 if (unit_type == _PROTOSS_GATEWAY).any():
@@ -147,17 +135,19 @@ class RuleBaseAgent(base_agent.BaseAgent):
             if not self.army_selected: # 圈選軍隊
                 if _SELECT_ARMY in obs.observation["available_actions"]:
                     self.army_selected = True
-                    # self.gateway_selected = False # 不確定這步是幹嘛的
 
                     return actions.FunctionCall(_SELECT_ARMY, [_SELECT_ALL])
             elif _ATTACK_MINIMAP in obs.observation["available_actions"]:
                 self.army_rallied = True
-                # self.army_selected = False # 不確定這步是幹嘛的
 
                 # 進攻與自己星核相對的位置(hardcode)
                 if self.nexus_top_left:
+                    self.army_selected = False
+                    self.army_rallied = False
                     return actions.FunctionCall(_ATTACK_MINIMAP, [_MINIMAP, [39, 45]])
                 else:
+                    self.army_selected = False
+                    self.army_rallied = False
                     return actions.FunctionCall(_ATTACK_MINIMAP, [_MINIMAP, [21, 24]])
 
         # 如果現在的observation不符合任一條規則，則什麼都不做
