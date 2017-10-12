@@ -12,7 +12,10 @@
 
 # Getting Started
 
-以下以MacOSX Sierra 環境為準，安裝Anaconda時請一路Enter與Yes到底。
+首先必須先安裝星海爭霸2並申請帳號(免費)，可參考以下slide進行安裝：  
+https://goo.gl/d5L4yD
+
+接下來安裝需要的套件，以下以MacOSX Sierra 環境為準，安裝Anaconda時請一路Enter與Yes到底。
 
 ```
 wget https://repo.continuum.io/archive/Anaconda3-5.0.0-MacOSX-x86_64.sh
@@ -44,6 +47,11 @@ python dqn_agent/train_mineral_shards.py
 * dqn agent
 
 卡在13~14分左右就上不去了。
+
+# Slide
+
+2017.10.02於Taiwan R User Group / MLDM 分享的投影片：  
+https://goo.gl/oeEFvr
 
 
 # References
