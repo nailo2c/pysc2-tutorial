@@ -24,6 +24,7 @@ source .bash_profile
 pip install tensorflow
 pip install baselines
 pip install pysc2
+pip install absl-py
 ```
 
 # How to run
