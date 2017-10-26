@@ -18,7 +18,7 @@ from pysc2.env import environment
 from pysc2.lib import features
 from pysc2.lib import actions
 
-import gflags as flags
+from absl import flags
 
 # 這段code的整體架構參考:
 # https://github.com/openai/baselines/blob/master/baselines/deepq/simple.py
