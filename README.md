@@ -31,7 +31,7 @@ pip install absl-py
 
 * scripted agent
 ```
-python -m pysc2.bin.agent --map Simple64 --agent scripted_agent.simple_agent_protoss.RuleBaseAgent --agent_race P --bot_race Z
+python -m pysc2.bin.agent --map Simple64 --agent scripted_agent.simple_agent_protoss.RuleBaseAgent --agent_race protoss
 ```
 
 * dqn agent

@@ -65,14 +65,14 @@ class RuleBaseAgent(base_agent.BaseAgent):
         if self.nexus_top_left is None:
             # 從observation的minimap的其中一個feature來取得自己基地的座標，
             # 由於知道地圖是Simple64，因此若在左上則y座標會小於31
-            nexus_y, nexus_x = (obs.observation["minimap"][_PLAYER_RELATIVE] == _PLAYER_SELF).nonzero()
+            nexus_y, nexus_x = (obs.observation["feature_minimap"][_PLAYER_RELATIVE] == _PLAYER_SELF).nonzero()
             self.nexus_top_left = nexus_y.mean() <= 31
 
         # rule 1: 如果水晶塔還沒建造且探測機還沒被圈選，就圈選探測機
         # 如果水晶塔還沒建造但探測機已經被圈選了，就建造水晶塔
         if not self.pylon_built:
             if not self.probe_selected:
-                unit_type = obs.observation["screen"][_UNIT_TYPE] # 列出screen上所有單位
+                unit_type = obs.observation["feature_screen"][_UNIT_TYPE] # 列出screen上所有單位
                 probe_y, probe_x = (unit_type == _PROTOSS_PROBE).nonzero() 
 
                 target = [probe_x[0], probe_y[0]] # 選擇第一隻探測機
@@ -83,7 +83,7 @@ class RuleBaseAgent(base_agent.BaseAgent):
 
             # 看建造水晶塔在這個observation中是否為合法的action
             elif _BUILD_PYLON in obs.observation["available_actions"]:
-                unit_type = obs.observation["screen"][_UNIT_TYPE]
+                unit_type = obs.observation["feature_screen"][_UNIT_TYPE]
                 nexus_y, nexus_x = (unit_type == _PROTOSS_NEXUS).nonzero() # 找出星核的位置
 
                 # 找出星核上方或下方的位置並建造
@@ -95,7 +95,7 @@ class RuleBaseAgent(base_agent.BaseAgent):
         # rule 2: 如果水晶建造了但星門(兵營)還沒建造，則建造星門
         elif not self.gateway_built:
             if _BUILD_GATEWAY in obs.observation["available_actions"]:
-                unit_type = obs.observation["screen"][_UNIT_TYPE]
+                unit_type = obs.observation["feature_screen"][_UNIT_TYPE]
                 pylon_y, pylon_x = (unit_type == _PROTOSS_PYLON).nonzero()
                
                 target = self.transformLocation(int(pylon_x.mean()), 10, int(pylon_y.mean()), 0)
@@ -110,7 +110,7 @@ class RuleBaseAgent(base_agent.BaseAgent):
         elif not self.gateway_rallied:
             # 必須先選擇gateway，才能設置集合點
             if not self.gateway_selected:
-                unit_type = obs.observation["screen"][_UNIT_TYPE]
+                unit_type = obs.observation["feature_screen"][_UNIT_TYPE]
                 gateway_y, gateway_x = (unit_type == _PROTOSS_GATEWAY).nonzero()
 
                 # 確認有選擇到星門
